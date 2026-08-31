@@ -1,0 +1,181 @@
+/* default 主题 · 顶栏：毛玻璃 sticky + 品牌 + 菜单下划线高亮 + 图标按钮 */
+
+#topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--hulog-topbar-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--hulog-line);
+
+  .topbar-container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .topbar-brand {
+    flex: none;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--hulog-text-strong);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+
+    &:hover {
+      color: var(--hulog-accent);
+    }
+  }
+
+  .topbar-menu {
+    flex: 1 1 auto;
+    min-width: 0; /* 允许收缩，内容交给 ul 横向滚动 */
+    display: flex;
+
+    ul {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    ul::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* 菜单可横向滚动时的右缘渐隐提示（Layout 脚本按溢出状态加类） */
+    ul.scrollable {
+      mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent);
+      -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent);
+    }
+
+    li {
+      flex: none;
+    }
+
+    a {
+      position: relative;
+      display: inline-block;
+      padding: 6px 12px;
+      color: var(--hulog-text-muted);
+      border-radius: 6px;
+      white-space: nowrap;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 12px;
+        right: 12px;
+        bottom: 0;
+        height: 2px;
+        border-radius: 1px;
+        background: var(--hulog-accent);
+        transform: scaleX(0);
+        transform-origin: center;
+        transition: transform 0.2s;
+      }
+
+      &:hover {
+        color: var(--hulog-text-strong);
+        background: var(--hulog-bg-subtle);
+
+        &::after {
+          transform: scaleX(1);
+        }
+      }
+
+      &.active {
+        color: var(--hulog-accent);
+
+        &::after {
+          transform: scaleX(1);
+        }
+      }
+    }
+  }
+
+  .topbar-icons {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+
+    .icon-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: none;
+      color: var(--hulog-text-muted);
+      border-radius: 8px;
+      cursor: pointer;
+      transition:
+        color 0.2s,
+        background-color 0.2s;
+
+      &:hover {
+        color: var(--hulog-accent);
+        background: var(--hulog-bg-subtle);
+      }
+    }
+
+    /* 主题切换：按当前模式显示对应图标 */
+    .icon-theme {
+      .icon-sun {
+        display: none;
+      }
+      .icon-moon {
+        display: block;
+      }
+    }
+
+    html.dark & .icon-theme {
+      .icon-sun {
+        display: block;
+      }
+      .icon-moon {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  #topbar .topbar-container {
+    padding: 0 10px;
+    gap: 8px;
+
+    .topbar-brand {
+      font-size: 15px;
+    }
+
+    .topbar-menu a {
+      padding: 6px 9px;
+      font-size: 15px;
+    }
+
+    .topbar-icons {
+      gap: 0;
+
+      .icon-button {
+        width: 32px;
+        height: 32px;
+      }
+    }
+  }
+}

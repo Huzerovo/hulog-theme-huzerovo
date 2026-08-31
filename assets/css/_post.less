@@ -1,0 +1,387 @@
+/* default 主题 · 文章正文排版 + 目录 + 评论 */
+
+.post-main {
+  display: grid;
+  gap: 40px;
+  align-items: start;
+  grid-template-areas: "article";
+
+  /* 拥挤模式（默认）：TOC 与正文并排，整体居中 */
+  &.toc-left {
+    grid-template-columns: 260px minmax(0, 1fr);
+    grid-template-areas: "toc article";
+  }
+
+  &.toc-right {
+    grid-template-columns: minmax(0, 1fr) 260px;
+    grid-template-areas: "article toc";
+  }
+}
+
+.article-container {
+  grid-area: article;
+  min-width: 0;
+}
+
+#article-toc {
+  grid-area: toc;
+}
+
+/* 宽屏模式：正文固定在视口正中间（760px 阅读宽度），TOC 侧置 */
+@media (min-width: 1200px) {
+  /* 特异性需盖过 main.container { max-width: 880px } */
+  main.container.post-container {
+    max-width: none; /* 正文居中需要容器占满视口 */
+  }
+
+  .post-main.toc-left {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 760px) minmax(0, 1fr);
+    grid-template-areas: "toc article .";
+  }
+
+  .post-main.toc-right {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 760px) minmax(0, 1fr);
+    grid-template-areas: ". article toc";
+  }
+
+  .post-main.toc-left #article-toc {
+    justify-self: end; /* 贴近正文左侧 */
+    width: 260px;
+    max-width: 100%;
+  }
+
+  .post-main.toc-right #article-toc {
+    justify-self: start; /* 贴近正文右侧 */
+    width: 260px;
+    max-width: 100%;
+  }
+}
+
+/* 文章正文 */
+.article-container {
+  background-color: var(--hulog-bg-elevated);
+  border: 1px solid var(--hulog-line);
+  border-radius: 14px;
+  box-shadow: var(--hulog-shadow);
+  padding: 36px 42px;
+  min-width: 0;
+
+  .article-head {
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--hulog-line);
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 30px;
+      text-align: center;
+      position: relative;
+      padding-bottom: 14px;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+        width: 56px;
+        height: 3px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, var(--hulog-accent), var(--hulog-warm));
+      }
+    }
+
+    .article-head-meta {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      color: var(--hulog-text-faint);
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+  }
+
+  h2 {
+    font-size: 22px;
+    margin: 36px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--hulog-line);
+  }
+
+  h3 {
+    font-size: 18px;
+    margin: 28px 0 12px;
+  }
+
+  h4,
+  h5,
+  h6 {
+    font-size: 16px;
+    margin: 22px 0 10px;
+  }
+
+  p {
+    margin: 14px 0;
+  }
+
+  blockquote {
+    margin: 18px 0;
+    padding: 12px 20px;
+    background-color: var(--hulog-bg-subtle);
+    border-left: 4px solid var(--hulog-accent);
+    border-radius: 0 8px 8px 0;
+    color: var(--hulog-text-muted);
+
+    p {
+      margin: 6px 0;
+    }
+
+    blockquote {
+      background: transparent;
+      border-left-color: var(--hulog-line-strong);
+    }
+  }
+
+  table {
+    width: 100%;
+    margin: 18px 0;
+    border-collapse: collapse;
+    border: 1px solid var(--hulog-line-strong);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 15px;
+
+    thead {
+      background-color: var(--hulog-thead-bg);
+      color: var(--hulog-text-strong);
+
+      th {
+        font-weight: 600;
+      }
+    }
+
+    th,
+    td {
+      border: 1px solid var(--hulog-line);
+      padding: 8px 12px;
+    }
+
+    tbody tr:nth-child(even) {
+      background: var(--hulog-bg-subtle);
+    }
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
+    margin: 18px auto;
+    border-radius: 10px;
+    cursor: zoom-in;
+  }
+
+  ul,
+  ol {
+    padding-left: 26px;
+
+    li {
+      margin: 5px 0;
+    }
+
+    li::marker {
+      color: var(--hulog-accent);
+    }
+  }
+
+  /* GFM 任务列表 */
+  .task-list-item {
+    list-style: none;
+    margin-left: -26px;
+
+    input[type="checkbox"] {
+      margin-right: 8px;
+      accent-color: var(--hulog-accent);
+    }
+  }
+
+  /* GFM 脚注 */
+  .footnotes {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--hulog-line);
+    font-size: 14px;
+    color: var(--hulog-text-muted);
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+  }
+
+  .article-foot {
+    margin-top: 36px;
+    padding-top: 18px;
+    border-top: 1px solid var(--hulog-line);
+
+    .article-taxonomies {
+      p {
+        margin: 6px 0;
+        font-size: 14px;
+        color: var(--hulog-text-muted);
+      }
+
+      a {
+        margin: 0 2px;
+      }
+    }
+
+    .article-share {
+      margin: 10px 0 0;
+      font-size: 13px;
+      color: var(--hulog-text-faint);
+      word-break: break-all;
+    }
+  }
+}
+
+/* 目录 */
+#article-toc {
+  grid-area: toc;
+  position: sticky;
+  top: 76px;
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+  padding: 14px 16px;
+  border-left: 1px solid var(--hulog-line);
+  box-sizing: border-box; /* 窄侧列时 max-width:100% 含 padding，避免溢出 */
+
+  /* 折叠开关：整条可点击 */
+  .toc-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0 0 10px;
+    padding: 4px 8px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: 6px;
+    color: var(--hulog-text-faint);
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+
+    &:hover {
+      color: var(--hulog-accent);
+      background: var(--hulog-bg-subtle);
+    }
+
+    .toc-title {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .toc-arrow {
+      transition: transform 0.25s;
+    }
+  }
+
+  /* 折叠动画：grid-template-rows 0fr 技巧 */
+  .toc-body {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition: grid-template-rows 0.25s ease;
+
+    > * {
+      overflow: hidden;
+    }
+  }
+
+  &.collapsed {
+    .toc-arrow {
+      transform: rotate(-90deg);
+    }
+
+    .toc-body {
+      grid-template-rows: 0fr;
+    }
+  }
+
+  .toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    .toc-item {
+      margin: 4px 0;
+
+      a {
+        display: block;
+        padding: 3px 8px;
+        border-radius: 6px;
+        color: var(--hulog-text-muted);
+        font-size: 13px;
+        line-height: 1.5;
+        border-left: 2px solid transparent;
+
+        &:hover {
+          color: var(--hulog-accent);
+          background: var(--hulog-bg-subtle);
+        }
+      }
+    }
+
+    .toc-level-2 {
+      padding-left: 12px;
+    }
+
+    .toc-level-3 {
+      padding-left: 24px;
+    }
+  }
+}
+
+/* 评论 */
+.comment {
+  margin-top: 36px;
+  padding-top: 18px;
+  border-top: 1px solid var(--hulog-line);
+}
+
+.comment-disabled {
+  margin-top: 36px;
+  text-align: center;
+  color: var(--hulog-text-faint);
+  font-size: 14px;
+}
+
+@media (max-width: 960px) {
+  /* 窄屏单列：TOC 在正文上方（grid-area 保证顺序，与 DOM 无关） */
+  .post-main.toc-left,
+  .post-main.toc-right {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "toc"
+      "article";
+  }
+
+  #article-toc {
+    position: static;
+    max-height: none;
+    border-left: none;
+    border-bottom: 1px solid var(--hulog-line);
+  }
+}
+
+@media (max-width: 640px) {
+  .article-container {
+    padding: 24px 20px;
+  }
+}

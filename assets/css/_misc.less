@@ -1,0 +1,118 @@
+/* default 主题 · 杂项：分页器 / 回到顶部 / 灯箱 / 页脚 */
+
+/* 分页器 */
+.pager {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin: 28px 0;
+
+  .page-number,
+  .extend {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    color: var(--hulog-text-muted);
+    font-size: 14px;
+    background-color: var(--hulog-bg-elevated);
+    border: 1px solid var(--hulog-line);
+    transition:
+      color 0.2s,
+      border-color 0.2s,
+      background-color 0.2s;
+
+    &:hover {
+      color: var(--hulog-accent);
+      border-color: var(--hulog-accent);
+    }
+  }
+
+  .current {
+    color: #fff;
+    background-color: var(--hulog-accent);
+    border-color: var(--hulog-accent);
+    font-weight: 600;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+/* 回到顶部 */
+#goto-top {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--hulog-accent);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--hulog-shadow-hover);
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition:
+    opacity 0.25s,
+    transform 0.25s,
+    background-color 0.2s;
+
+  &.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  &:hover {
+    background-color: var(--hulog-accent-strong);
+  }
+}
+
+/* 灯箱 */
+#lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+
+  &.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  img {
+    max-width: 92vw;
+    max-height: 90vh;
+    border-radius: 8px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* 页脚 */
+#site-footer {
+  text-align: center;
+  color: var(--hulog-text-faint);
+  font-size: 13px;
+  padding: 36px 16px 48px;
+  border-top: 1px solid var(--hulog-line);
+
+  p {
+    margin: 6px 0;
+  }
+}
