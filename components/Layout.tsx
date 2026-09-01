@@ -19,7 +19,7 @@ export default function Layout({
   api,
   children,
   active,
-}: LayoutProps & { children?: ComponentChildren; active?: string }) {
+}: LayoutProps & { children?: ComponentChildren; active?: string; }) {
   const tc = themeConfigOf(config);
   const t = makeT(config.language);
   const themeAsset = api.plugins.helpers.get("themeAsset") as (p: string) => string;

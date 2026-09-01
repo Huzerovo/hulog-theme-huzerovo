@@ -25,7 +25,7 @@ export default function PageLayout(props: LayoutProps) {
   const tc = themeConfigOf(config);
 
   return (
-    <Layout {...props} active={page.title}>
+    <Layout {...props} active={page.layout}>
       <main class="container">
         <header class="page-head">
           <h1 class="page-title">{getPageTitle(page.title, tc, t)}</h1>
