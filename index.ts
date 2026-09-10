@@ -1,5 +1,3 @@
-import type { Theme, ThemeAPI } from "@hulog/core";
-import { ARCHIVES_BASE } from "@hulog/core";
 import PostLayout from "./layouts/PostLayout";
 import PageLayout from "./layouts/PageLayout";
 import HomeLayout from "./layouts/HomeLayout";
@@ -17,49 +15,44 @@ import TagLayout from "./layouts/TagLayout";
  * - 纯原生 JS（主题切换 / 搜索 / 灯箱 / 回到顶部），无 jQuery / 图标库依赖
  * - 配色为 huzerovo 色系的再打磨（靛蓝主色 + 暖橙点缀，CSS 变量 --hulog-*）
  */
-export default function (api: ThemeAPI): Theme {
-  void api;
-  return {
-    name: "default",
-    config: {
-      index: "首页",
-      menu: {
-        home: { title: "首页", link: "/" },
-        archives: { title: "归档", link: `/${ARCHIVES_BASE}` },
-        categories: { title: "分类", link: "/categories" },
-        tagcloud: { title: "标签云", link: "/tagcloud" },
-        about: { title: "关于", link: "/about" },
-      },
-      covers: [],
-      email: "",
-      search: { enable: true, link: "/search" },
-      toc: true,
-      tocSide: "left",
-      katex: {
-        enable: true,
-        css: "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css",
-      },
-      style: { light: "css/light.css", dark: "css/dark.css" },
-      gitalk: { enable: false },
-      lightbox: { enable: true },
-      links: {},
-      creativecommons: {
-        license: "CC BY-NC-ND 4.0",
-        link: "https://creativecommons.org/licenses/by-nc-nd/4.0/",
-        description: "如无特殊说明，网站内容采用#授权",
-      },
-      archives_page: { enabled: true, year_per_page: 5 },
+export default {
+  name: "default",
+  config: {
+    index: "首页",
+    menu: {
+      home: { title: "首页", link: "/" },
+      archives: { title: "归档", link: `/archives` },
+      categories: { title: "分类", link: "/categories" },
+      tagcloud: { title: "标签云", link: "/tagcloud" },
+      about: { title: "关于", link: "/about" },
     },
-    layouts: {
-      post: PostLayout,
-      page: PageLayout,
-      index: HomeLayout,
-      archives: ArchiveLayout,
-      category: CategoryLayout,
-      tag: TagLayout,
-      default: PageLayout,
+    covers: [],
+    email: "",
+    search: { enable: true, link: "/search" },
+    toc: true,
+    tocSide: "left",
+    katex: {
+      enable: true,
+      css: "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css",
     },
-    assetsDir: "assets",
-    assetsMode: "merge",
-  };
-}
+    style: { light: "css/light.css", dark: "css/dark.css" },
+    gitalk: { enable: false },
+    lightbox: { enable: true },
+    links: {},
+    creativecommons: {
+      license: "CC BY-NC-ND 4.0",
+      link: "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+      description: "如无特殊说明，网站内容采用#授权",
+    },
+    archives_page: { enabled: true, year_per_page: 5 },
+  },
+  layouts: {
+    post: PostLayout,
+    page: PageLayout,
+    index: HomeLayout,
+    archives: ArchiveLayout,
+    category: CategoryLayout,
+    tag: TagLayout,
+    default: PageLayout,
+  },
+};

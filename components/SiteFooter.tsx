@@ -5,8 +5,8 @@ import { formatDate, getCC } from "../lib/utils";
 
 /** 页脚：版权 / 邮箱 / CC 协议 / Powered by */
 export default function SiteFooter() {
-  const { config } = useContext(ThemeContext);
-  const tc = themeConfigOf(config);
+  const { config, api } = useContext(ThemeContext);
+  const tc = themeConfigOf(api);
 
   return (
     <footer id="site-footer">

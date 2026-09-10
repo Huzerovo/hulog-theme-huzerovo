@@ -7,8 +7,8 @@ import { themeConfigOf } from "../lib/types";
  * 图标为内联 SVG，无外部图标库依赖。
  */
 export default function Topbar({ active }: { active?: string }) {
-  const { config, t } = useContext(ThemeContext);
-  const tc = themeConfigOf(config);
+  const { config, t, api } = useContext(ThemeContext);
+  const tc = themeConfigOf(api);
   const brand = tc.brand || config.siteTitle;
 
   return (

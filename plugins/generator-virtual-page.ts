@@ -2,9 +2,9 @@ import { GeneratorAPI } from '@/plugins.js';
 import { Page, PageBase } from '@/types';
 
 type FunVirtualPage = (page: PageBase) => Page;
-export default function(api: GeneratorAPI) {
-  const virtualPage = api.plugins.helpers.get("virtualPage") as FunVirtualPage;
-  api.plugins.generators.register("theme:vPageGenerate", () => {
+export default function(plugins: GeneratorAPI) {
+  const virtualPage = plugins.helpers.get("virtualPage") as FunVirtualPage;
+  plugins.generators.register("theme:vPageGenerate", () => {
     const searchPage = virtualPage({
       id: "search",
       url: "/search",

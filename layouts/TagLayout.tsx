@@ -6,8 +6,8 @@ import { makeT } from "../lib/i18n";
 
 /** 标签文章列表 */
 export default function TagLayout(props: LayoutProps) {
-  const { page, config } = props;
-  const t = makeT(config.language);
+  const { page, api } = props;
+  const t = makeT(api.site!.config.language);
   const posts = (page.data.posts ?? []) as Page[];
   const pagination = page.data.pagination as any;
 

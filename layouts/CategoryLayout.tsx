@@ -14,8 +14,8 @@ import {
  * 标题为层级面包屑（每段可点击），存在子分类时展示子分类 chip。
  */
 export default function CategoryLayout(props: LayoutProps) {
-  const { page, config, api } = props;
-  const t = makeT(config.language);
+  const { page, api } = props;
+  const t = makeT(api.site!.config.language);
   const helper = api.plugins.helpers;
   const posts = (page.data.posts ?? []) as typeof page[];
   const pagination = page.data.pagination as any;
@@ -24,7 +24,7 @@ export default function CategoryLayout(props: LayoutProps) {
     path: CategoryPath,
   ) => string;
   const crumbs = categoryBreadcrumb(path, helper);
-  const children = getChildCategories(props.site, path, helper);
+  const children = getChildCategories(api.site!, path, helper);
 
   return (
     <Layout {...props } active="categories">

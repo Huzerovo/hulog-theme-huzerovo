@@ -20,9 +20,10 @@ import {
  * （about / categories / search / tagcloud / uncategorized / default）
  */
 export default function PageLayout(props: LayoutProps) {
-  const { page, config } = props;
+  const { page, api } = props;
+  const config = api.site!.config;
   const t = makeT(config.language);
-  const tc = themeConfigOf(config);
+  const tc = themeConfigOf(api);
 
   return (
     <Layout {...props} active={page.layout}>
@@ -30,7 +31,7 @@ export default function PageLayout(props: LayoutProps) {
         <header class="page-head">
           <h1 class="page-title">{getPageTitle(page.title, tc, t)}</h1>
         </header>
-        <PageBody page={page} site={props.site} />
+        <PageBody page={page} site={api.site!} />
       </main>
     </Layout>
   );
@@ -59,8 +60,8 @@ function PageBody({ page, site }: { page: Page; site: Site; }) {
 
 /** 关于页 */
 function AboutPage({ page }: { page: Page; }) {
-  const { config } = useContext(ThemeContext);
-  const tc = themeConfigOf(config);
+  const { api } = useContext(ThemeContext);
+  const tc = themeConfigOf(api);
   const avatar = page.data.avatar ?? tc.avatar;
   const menuLink = tc.menu?.about?.link ?? "/about";
   return (

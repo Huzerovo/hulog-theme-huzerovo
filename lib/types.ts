@@ -1,4 +1,6 @@
-/** default 主题配置（来自站点 config.themeConfig） */
+import type { PluginAPI } from "@hulog/core";
+
+/** 主题配置（来自 api.theme.config） */
 export interface GitalkConfig {
   clientID: string,
   clientSecret: string,
@@ -50,8 +52,6 @@ export interface DefaultThemeConfig {
   avatar?: string;
 }
 
-export function themeConfigOf(config: {
-  themeConfig?: Record<string, unknown>;
-}): DefaultThemeConfig {
-  return (config.themeConfig ?? {}) as DefaultThemeConfig;
+export function themeConfigOf(api: PluginAPI): DefaultThemeConfig {
+  return (api.theme?.config ?? {}) as DefaultThemeConfig;
 }

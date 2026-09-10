@@ -8,8 +8,8 @@ import { GitalkConfig, themeConfigOf } from "../lib/types";
  * 文章 front-matter gitalk: true 且主题启用时渲染。
  */
 export default function Comment({ page }: { page: Page; }) {
-  const { config, t } = useContext(ThemeContext);
-  const tc = themeConfigOf(config);
+  const { t, api } = useContext(ThemeContext);
+  const tc = themeConfigOf(api);
 
   if (!tc.gitalk?.enable || !page.data.gitalk || !page.title) {
     return (

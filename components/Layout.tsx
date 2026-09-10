@@ -14,13 +14,12 @@ import SiteFooter from "./SiteFooter";
  */
 export default function Layout({
   page,
-  config,
-  styles,
   api,
   children,
   active,
 }: LayoutProps & { children?: ComponentChildren; active?: string; }) {
-  const tc = themeConfigOf(config);
+  const config = api.site!.config;
+  const tc = themeConfigOf(api);
   const t = makeT(config.language);
   const themeAsset = api.plugins.helpers.get("themeAsset") as (p: string) => string;
   const useCoreHighlight = config.markdown?.highlight !== false;
@@ -154,9 +153,6 @@ window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", Th
             <link rel="stylesheet" href={themeAsset(tc.style.dark)} />
           ) : null}
           <link rel="stylesheet" href={themeAsset("css/main.css")} />
-          {styles ? (
-            <style dangerouslySetInnerHTML={{ __html: styles }} />
-          ) : null}
 
           {katexCss ? <link rel="stylesheet" href={tc.katex!.css} /> : null}
           {config.markdown?.katex === false && tc.katex?.enable ? (

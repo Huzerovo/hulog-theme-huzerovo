@@ -8,8 +8,8 @@ import { themeConfigOf } from "../lib/types";
  * 首页布局：page.data.posts（当前页文章）+ page.data.pagination
  */
 export default function HomeLayout(props: LayoutProps) {
-  const { page, config } = props;
-  const tc = themeConfigOf(config);
+  const { page, api } = props;
+  const tc = themeConfigOf(api);
   const posts = (page.data.posts ?? []) as typeof page[];
   const pagination = page.data.pagination as any;
 

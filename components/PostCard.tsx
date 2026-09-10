@@ -15,8 +15,8 @@ import {
  * 封面（可选）+ 标题 + 摘要 + 底部信息（日期 / 置顶 / 待办徽标）。
  */
 export default function PostCard({ post }: { post: Page }) {
-  const { config, t } = useContext(ThemeContext);
-  const tc = themeConfigOf(config);
+  const { config, t, api } = useContext(ThemeContext);
+  const tc = themeConfigOf(api);
   const covers = getPostCovers(post, tc);
   const postLink = post.link && post.link !== "" ? post.link : post.url;
   const cover =

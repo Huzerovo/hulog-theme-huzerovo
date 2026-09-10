@@ -11,12 +11,13 @@ import { formatDate } from "../lib/utils";
  * - 单年归档：page.data.year 存在，仅展示该年文章
  */
 export default function ArchiveLayout(props: LayoutProps) {
-  const { page, config } = props;
+  const { page, api } = props;
+  const config = api.site!.config;
   const t = makeT(config.language);
   const posts = (page.data.posts ?? []) as Page[];
   const year = page.data.year as number | undefined;
   const pagination = page.data.pagination as any;
-  const archivesDir = (props.config.archivesDir ?? ARCHIVES_BASE).replace(
+  const archivesDir = (config.archivesDir ?? ARCHIVES_BASE).replace(
     /^\/+|\/+$/g,
     "",
   );

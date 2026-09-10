@@ -43,8 +43,9 @@ function wrapImages(html: string): string {
  * 文章布局：正文 + 固定目录（桌面端左侧）+ 分类/标签 + 日期 + 评论。
  */
 export default function PostLayout(props: LayoutProps) {
-  const { page, config, api } = props;
-  const tc = themeConfigOf(config);
+  const { page, api } = props;
+  const config = api.site!.config;
+  const tc = themeConfigOf(api);
   const t = makeT(config.language);
   const helper = api.plugins.helpers;
   const categoryPathToUrl = helper.get("categoryPathToUrl") as (
