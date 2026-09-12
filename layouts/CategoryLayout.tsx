@@ -16,7 +16,7 @@ import {
 export default function CategoryLayout(props: LayoutProps) {
   const { page, api } = props;
   const t = makeT(api.site!.config.language);
-  const helper = api.plugins.helpers;
+  const helper = api.helper;
   const posts = (page.data.posts ?? []) as typeof page[];
   const pagination = page.data.pagination as any;
   const path = (page.data.categoryPath ?? []) as CategoryPath;

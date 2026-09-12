@@ -31,10 +31,11 @@ export default {
     search: { enable: true, link: "/search" },
     toc: true,
     tocSide: "left",
-    katex: {
-      enable: true,
-      css: "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css",
-    },
+      katex: {
+        enable: true,
+        css: "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css",
+      },
+      mermaid: { enable: true },
     style: { light: "css/light.css", dark: "css/dark.css" },
     gitalk: { enable: false },
     lightbox: { enable: true },

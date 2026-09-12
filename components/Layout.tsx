@@ -21,9 +21,17 @@ export default function Layout({
   const config = api.site!.config;
   const tc = themeConfigOf(api);
   const t = makeT(config.language);
-  const themeAsset = api.plugins.helpers.get("themeAsset") as (p: string) => string;
+  const themeAsset = api.helper.get("themeAsset") as (p: string) => string;
   const useCoreHighlight = config.markdown?.highlight !== false;
   const katexCss = config.markdown?.katex !== false && tc.katex?.enable;
+  // Mermaid：仅当本页含 .mermaid 容器时按需加载客户端渲染脚本
+  const mermaidEnabled =
+    config.markdown?.mermaid !== false && tc.mermaid?.enable !== false;
+  const mermaidJs =
+    tc.mermaid?.js ??
+    "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  const mermaidTheme = tc.mermaid?.theme ?? "default";
+  const hasMermaid = mermaidEnabled && page.content.includes('class="mermaid"');
 
   const themeScript = `
 const ThemeSwitcher = (() => {
@@ -191,6 +199,15 @@ window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", Th
             </div>
           ) : null}
           <script src={themeAsset("js/search.js")}></script>
+          {hasMermaid ? (
+            <script
+              type="module"
+              src={themeAsset("js/mermaid.js")}
+              data-hulog-mermaid=""
+              data-src={mermaidJs}
+              data-theme={mermaidTheme}
+            />
+          ) : null}
           <script dangerouslySetInnerHTML={{ __html: bottomScript }} />
         </body>
       </html>

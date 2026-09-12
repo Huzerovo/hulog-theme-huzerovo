@@ -101,10 +101,37 @@ pre.shiki .line {
 }
 
 /* 无高亮代码块（highlight:false 等场景） */
-pre:not(.shiki) {
+pre:not(.shiki):not(.mermaid) {
   background-color: var(--hulog-code-bg);
   border: 1px solid var(--hulog-line);
   border-radius: 10px;
   padding: 14px 18px;
   overflow-x: auto;
+}
+
+/* Mermaid：JS 未启用时显示源码（降级） */
+.mermaid {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 1.2em 0;
+  overflow-x: auto;
+  color: var(--hulog-text-muted);
+  font-size: 0.9em;
+}
+
+/* Mermaid：Shadow DOM 隔离视图（客户端渲染，内含缩放/平移控件）。
+   固定浅色背景：mermaid 默认主题为深色线条，深色页面下不可见。 */
+.mermaid-viewer {
+  display: block;
+  position: relative;
+  width: 100%;
+  margin: 1.2em 0;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  background-color: #ffffff;
+  overflow: hidden;
+  /* 高图限制高度，超出部分由内部缩放/平移查看 */
+  max-height: min(70vh, 520px);
+  min-height: 140px;
 }

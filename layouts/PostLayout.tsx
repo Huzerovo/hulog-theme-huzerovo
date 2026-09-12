@@ -47,7 +47,7 @@ export default function PostLayout(props: LayoutProps) {
   const config = api.site!.config;
   const tc = themeConfigOf(api);
   const t = makeT(config.language);
-  const helper = api.plugins.helpers;
+  const helper = api.helper;
   const categoryPathToUrl = helper.get("categoryPathToUrl") as (
     path: CategoryPath,
   ) => string;

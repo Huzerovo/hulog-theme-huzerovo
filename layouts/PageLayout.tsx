@@ -92,7 +92,7 @@ function AboutPage({ page }: { page: Page; }) {
 /** 分类页：未分类入口 + 分类树（huzerovo 风格嵌套列表，父分类下显示子分类） */
 function CategoriesPage({ site }: { site: Site; }) {
   const { config, t, api } = useContext(ThemeContext);
-  const helper = api.plugins.helpers;
+  const helper = api.helper;
   const posts = site.collections.get("posts")?.getPages(true) ?? [];
   const tree = getCategoryTree(posts, helper);
   const uncategorized = getUncategorizedPosts(posts);

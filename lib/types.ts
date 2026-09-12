@@ -1,4 +1,4 @@
-import type { PluginAPI } from "@hulog/core";
+import type { CoreAPI } from "@hulog/core";
 
 /** 主题配置（来自 api.theme.config） */
 export interface GitalkConfig {
@@ -32,6 +32,14 @@ export interface DefaultThemeConfig {
   tocSide?: "left" | "right";
   /** 数学公式（构建时 rehype-katex 已渲染时仅注入 CSS） */
   katex?: { enable?: boolean; css?: string; js?: string[]; };
+  /** Mermaid 图表（客户端渲染；由 core 将 ```mermaid 转为 .mermaid 容器） */
+  mermaid?: {
+    enable?: boolean;
+    /** mermaid ESM 入口 URL（默认 jsDelivr） */
+    js?: string;
+    /** mermaid 主题：default | dark | neutral | forest */
+    theme?: string;
+  };
   /** 主题样式（明/暗两套，含 CSS 变量定义） */
   style?: { light?: string; dark?: string; };
   /** 评论（Gitalk，结构兼容 huzerovo） */
@@ -52,6 +60,6 @@ export interface DefaultThemeConfig {
   avatar?: string;
 }
 
-export function themeConfigOf(api: PluginAPI): DefaultThemeConfig {
+export function themeConfigOf(api: CoreAPI): DefaultThemeConfig {
   return (api.theme?.config ?? {}) as DefaultThemeConfig;
 }

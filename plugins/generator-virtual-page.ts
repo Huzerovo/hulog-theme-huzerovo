@@ -1,10 +1,10 @@
-import { GeneratorAPI } from '@/plugins.js';
-import { Page, PageBase } from '@/types';
+import type { GeneratorAPI, Page, PageBase } from "@hulog/core";
 
 type FunVirtualPage = (page: PageBase) => Page;
-export default function(plugins: GeneratorAPI) {
-  const virtualPage = plugins.helpers.get("virtualPage") as FunVirtualPage;
-  plugins.generators.register("theme:vPageGenerate", () => {
+
+export default function (api: GeneratorAPI) {
+  const virtualPage = api.helper.get("virtualPage") as FunVirtualPage;
+  api.generator.register("theme:vPageGenerate", () => {
     const searchPage = virtualPage({
       id: "search",
       url: "/search",
@@ -25,5 +25,4 @@ export default function(plugins: GeneratorAPI) {
     });
     return [searchPage, categoriesPage, tagcloudPage];
   });
-
 }
