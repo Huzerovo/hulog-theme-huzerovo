@@ -23,6 +23,7 @@ export default function PostCard({ post }: { post: Page; }) {
     covers.length > 0 ? pickCoverUrl(covers, post.slug) : "";
 
   const excerpt = stripHtml(post.excerpt ?? "");
+  const todoMsg = post.data.todo_msg as string ?? "todo_msg";
   const content =
     excerpt === ""
       ? truncate(stripHtml(post.content), 140, "...")
@@ -56,7 +57,7 @@ export default function PostCard({ post }: { post: Page; }) {
               <span class="badge badge-draft">{t("draft")}</span>
             ) : null}
             {post.data.todo ? (
-              <span class="badge badge-todo">{t("todo_msg")}</span>
+              <span class="badge badge-todo">{t(todoMsg)}</span>
             ) : null}
             {post.data.pin ? (
               <span class="badge badge-pin">{t("pin")}</span>
