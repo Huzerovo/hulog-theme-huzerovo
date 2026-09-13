@@ -14,7 +14,7 @@ import {
  * 文章卡片（default 主题首页/列表单元）：
  * 封面（可选）+ 标题 + 摘要 + 底部信息（日期 / 置顶 / 待办徽标）。
  */
-export default function PostCard({ post }: { post: Page }) {
+export default function PostCard({ post }: { post: Page; }) {
   const { config, t, api } = useContext(ThemeContext);
   const tc = themeConfigOf(api);
   const covers = getPostCovers(post, tc);
@@ -43,14 +43,7 @@ export default function PostCard({ post }: { post: Page }) {
           </a>
         </h2>
 
-        {post.data.todo ? (
-          <p class="post-card-excerpt todo">
-            <span class="badge badge-todo">{t("todo_msg")}</span>
-            {truncate(content, 120, "...")}
-          </p>
-        ) : (
-          <p class="post-card-excerpt">{content}</p>
-        )}
+        <p class="post-card-excerpt">{content}</p>
 
         <div class="post-card-footer">
           <time class="post-card-date">
