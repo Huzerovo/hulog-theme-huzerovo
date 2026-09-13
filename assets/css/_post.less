@@ -57,6 +57,13 @@
   }
 }
 
+@media (min-width: 1440px) {
+  .post-main.toc-left,
+  .post-main.toc-right {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 900px) minmax(0, 1fr);
+  }
+}
+
 /* 文章正文 */
 .article-container {
   background-color: var(--hulog-bg-elevated);
