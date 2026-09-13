@@ -55,7 +55,16 @@ const ThemeSwitcher = (() => {
   };
   return { init: () => apply(current()), toggle, follow: () => apply(current()) };
 })();
-ThemeSwitcher.init();
+(function () {
+  try {
+    let root = ThemeSwitcher.root();
+    let current = ThemeSwitcher.current();
+    let dark = current ? current === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'dark' : 'light';
+    root.style.colorScheme = dark ? 'dark' : 'light';
+  } catch (e) {};
+})();
+window.load = ThemeSwitcher.init();
 window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", ThemeSwitcher.follow);
 `;
 

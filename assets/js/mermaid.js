@@ -3,7 +3,7 @@
  *
  * core 会把 ```mermaid 代码块转为 <pre class="mermaid">源码</pre>；
  * 本脚本加载 mermaid 后将每个图渲染为 SVG，放入 Shadow DOM（样式双向隔离，
- * 且 CSS 变量仍可穿透继承），内含滚轮缩放、拖拽平移与 +/−/重置按钮。
+ * 且 CSS 变量仍可穿透继承），内含滚轮/双指缩放、拖拽平移与 +/−/重置按钮。
  *
  * 视图固定使用浅色背景：mermaid 默认主题为深色线条，在深色页面背景下不可见。
  *
@@ -126,26 +126,82 @@ function buildViewer(svg) {
     zoomAt(e.clientX - r.left, e.clientY - r.top, e.deltaY < 0 ? 1.12 : 1 / 1.12);
   }, { passive: false });
 
+  const pointers = new Map(); // pointerId -> 舞台坐标 { x, y }
   let dragging = false, sx = 0, sy = 0;
-  stage.addEventListener("pointerdown", (e) => {
-    dragging = true;
-    sx = e.clientX - tx;
-    sy = e.clientY - ty;
-    stage.classList.add("grabbing");
-    try { stage.setPointerCapture(e.pointerId); } catch (_) { /* noop */ }
-  });
-  stage.addEventListener("pointermove", (e) => {
-    if (!dragging) return;
-    tx = e.clientX - sx;
-    ty = e.clientY - sy;
-    apply();
-  });
-  const endDrag = () => {
+  let pinchDist = 0, pinchMidX = 0, pinchMidY = 0;
+
+  const stagePoint = (e) => {
+    const r = stage.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  };
+  const startPinch = () => {
+    const a = [...pointers.values()][0];
+    const b = [...pointers.values()][1];
+    pinchDist = Math.hypot(a.x - b.x, a.y - b.y) || 1;
+    pinchMidX = (a.x + b.x) / 2;
+    pinchMidY = (a.y + b.y) / 2;
     dragging = false;
     stage.classList.remove("grabbing");
   };
-  stage.addEventListener("pointerup", endDrag);
-  stage.addEventListener("pointercancel", endDrag);
+
+  stage.addEventListener("pointerdown", (e) => {
+    const p = stagePoint(e);
+    pointers.set(e.pointerId, p);
+    try { stage.setPointerCapture(e.pointerId); } catch (_) { /* noop */ }
+    if (pointers.size === 2) {
+      startPinch();
+    } else if (pointers.size === 1) {
+      dragging = true;
+      sx = p.x - tx;
+      sy = p.y - ty;
+      stage.classList.add("grabbing");
+    }
+  });
+  stage.addEventListener("pointermove", (e) => {
+    if (!pointers.has(e.pointerId)) return;
+    const p = stagePoint(e);
+    pointers.set(e.pointerId, p);
+    if (pointers.size === 2) {
+      // 双指捏合：以两指中点为锚点缩放，并跟随中点平移
+      const a = [...pointers.values()][0];
+      const b = [...pointers.values()][1];
+      const dist = Math.hypot(a.x - b.x, a.y - b.y) || 1;
+      const midX = (a.x + b.x) / 2;
+      const midY = (a.y + b.y) / 2;
+      zoomAt(pinchMidX, pinchMidY, dist / pinchDist);
+      tx += midX - pinchMidX;
+      ty += midY - pinchMidY;
+      apply();
+      pinchDist = dist;
+      pinchMidX = midX;
+      pinchMidY = midY;
+      return;
+    }
+    if (!dragging) return;
+    tx = p.x - sx;
+    ty = p.y - sy;
+    apply();
+  });
+  const endPointer = (e) => {
+    pointers.delete(e.pointerId);
+    if (pointers.size >= 2) {
+      startPinch();
+      return;
+    }
+    if (pointers.size === 1) {
+      // 双指变单指：以剩余指针重建拖拽基准，避免跳变
+      const p = [...pointers.values()][0];
+      dragging = true;
+      sx = p.x - tx;
+      sy = p.y - ty;
+      stage.classList.add("grabbing");
+      return;
+    }
+    dragging = false;
+    stage.classList.remove("grabbing");
+  };
+  stage.addEventListener("pointerup", endPointer);
+  stage.addEventListener("pointercancel", endPointer);
 
   // 双击舞台切换全屏（与工具栏按钮等效）
   stage.addEventListener("dblclick", (e) => {
