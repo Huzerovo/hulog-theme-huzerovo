@@ -38,7 +38,7 @@ export default function PageLayout(props: LayoutProps) {
 }
 
 function PageBody({ page, site }: { page: Page; site: Site; }) {
-  switch (page.id) {
+  switch (page.layout ?? page.id) {
     case "about":
       return <AboutPage page={page} />;
     case "categories":
@@ -49,6 +49,9 @@ function PageBody({ page, site }: { page: Page; site: Site; }) {
       return <TagCloudPage site={site} />;
     case "uncategorized":
       return <UncategorizedPage site={site} />;
+    case "collection":
+      return <CollectionLayout page={page} site={site} />;
+    case "single":
     default:
       return (
         <div class="article-container">
@@ -56,6 +59,26 @@ function PageBody({ page, site }: { page: Page; site: Site; }) {
         </div>
       );
   }
+}
+
+/** 通用文章列表页面 */
+function CollectionLayout({ page, site }: { page: Page, site: Site; }) {
+
+  const posts = (site.collections.get(page.id)?.getPages() ?? []) as typeof page[];
+  const pagination = page.data.pagination as any;
+
+  return (
+    <div class="page-list">
+      <main class="container">
+        <header class="page-head">
+          <h1 class="page-title">{page.title} </h1>
+        </header>
+        <Pager pagination={pagination} />
+        <PostList posts={posts} />
+        <Pager pagination={pagination} />
+      </main>
+    </div>
+  );
 }
 
 /** 关于页 */
