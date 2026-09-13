@@ -21,7 +21,7 @@ const VIEWER_CSS = `
   #stage { position: absolute; inset: 0; overflow: hidden; cursor: grab; touch-action: none; }
   #stage.grabbing { cursor: grabbing; }
   #content { position: absolute; top: 0; left: 0; transform-origin: 0 0; will-change: transform; width: 100%; }
-  #content svg { display: block; max-width: none !important; height: auto; }
+  #content svg { display: block; max-width: none !important; height: auto; user-select: none; }
   .mz-toolbar { position: absolute; right: 8px; bottom: 8px; display: flex; gap: 4px; z-index: 2; }
   .mz-toolbar button {
     width: 26px; height: 26px; padding: 0; font-size: 14px; line-height: 1;
@@ -146,6 +146,12 @@ function buildViewer(svg) {
   };
   stage.addEventListener("pointerup", endDrag);
   stage.addEventListener("pointercancel", endDrag);
+
+  // 双击舞台切换全屏（与工具栏按钮等效）
+  stage.addEventListener("dblclick", (e) => {
+    e.preventDefault();
+    toggleExpand();
+  });
 
   toolbar.addEventListener("click", (e) => {
     const b = e.target.closest("button");
