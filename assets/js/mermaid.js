@@ -45,7 +45,7 @@ function buildViewer(svg) {
   const host = document.createElement("div");
   host.className = "mermaid-viewer";
   const ratio = aspectRatioOf(svg);
-  if (ratio) host.style.aspectRatio = ratio;
+  if (ratio) host.style.setProperty("--mz-ratio", ratio);
   else host.style.height = "360px";
 
   const shadow = host.attachShadow({ mode: "open" });
@@ -65,7 +65,8 @@ function buildViewer(svg) {
   toolbar.innerHTML =
     '<button type="button" data-act="out" title="缩小" aria-label="缩小">−</button>' +
     '<button type="button" data-act="reset" title="重置" aria-label="重置">⟲</button>' +
-    '<button type="button" data-act="in" title="放大" aria-label="放大">+</button>';
+    '<button type="button" data-act="in" title="放大" aria-label="放大">+</button>' +
+    '<button type="button" data-act="expand" title="全屏" aria-label="全屏">⛶</button>';
 
   shadow.append(style, stage, toolbar);
 
@@ -105,6 +106,20 @@ function buildViewer(svg) {
     apply();
   };
 
+  // 全屏（自定义遮罩）：切换 host 的 .expanded，并锁定页面滚动
+  const expandBtn = toolbar.querySelector('[data-act="expand"]');
+  const toggleExpand = () => {
+    const expanded = host.classList.toggle("expanded");
+    expandBtn.textContent = expanded ? "✕" : "⛶";
+    expandBtn.title = expanded ? "退出全屏" : "全屏";
+    expandBtn.setAttribute("aria-label", expanded ? "退出全屏" : "全屏");
+    document.body.style.overflow = expanded ? "hidden" : "";
+    requestAnimationFrame(fit);
+  };
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && host.classList.contains("expanded")) toggleExpand();
+  });
+
   stage.addEventListener("wheel", (e) => {
     e.preventDefault();
     const r = stage.getBoundingClientRect();
@@ -138,6 +153,7 @@ function buildViewer(svg) {
     const act = b.getAttribute("data-act");
     if (act === "in") zoomAt(stage.clientWidth / 2, stage.clientHeight / 2, 1.25);
     else if (act === "out") zoomAt(stage.clientWidth / 2, stage.clientHeight / 2, 1 / 1.25);
+    else if (act === "expand") toggleExpand();
     else fit();
   });
 
