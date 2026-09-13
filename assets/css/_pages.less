@@ -180,13 +180,7 @@
 /* 关于页 */
 .page-about {
   .about-card {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    background-color: var(--hulog-bg-elevated);
-    border: 1px solid var(--hulog-line);
-    border-radius: 14px;
-    box-shadow: var(--hulog-shadow);
+    text-align: center;
     padding: 24px 28px;
     margin-bottom: 24px;
 
@@ -194,12 +188,34 @@
       width: 96px;
       height: 96px;
       border-radius: 50%;
+      display: flex;
+      flex: none;
+      margin: 0 auto;
+      overflow: hidden;
+      align-items: center;
+      justify-content: center;
       object-fit: cover;
       border: 3px solid var(--hulog-line);
-      flex: none;
+      box-shadow: var(--hulog-shadow);
+    }
+
+    .avatar-large {
+      width: 240px;
+      height: 240px;
+    }
+
+    .avatar-middle {
+      width: 192px;
+      height: 192px;
+    }
+
+    .avatar-small {
+      width: 96px;
+      height: 96px;
     }
 
     .about-description {
+      margin-top: 24px;
       color: var(--hulog-text-muted);
     }
   }

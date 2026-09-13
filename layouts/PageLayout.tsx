@@ -1,4 +1,4 @@
-import { useContext } from "preact/hooks";
+import { useContext, useState } from "preact/hooks";
 import type { CategoryNode, CategoryPath, HelperRegistry, LayoutProps, Page, Site } from "@hulog/core";
 import Layout from "../components/Layout";
 import Pager from "../components/Pager";
@@ -70,9 +70,6 @@ function CollectionLayout({ page, site }: { page: Page, site: Site; }) {
   return (
     <div class="page-list">
       <main class="container">
-        <header class="page-head">
-          <h1 class="page-title">{page.title} </h1>
-        </header>
         <Pager pagination={pagination} />
         <PostList posts={posts} />
         <Pager pagination={pagination} />
@@ -86,15 +83,18 @@ function AboutPage({ page }: { page: Page; }) {
   const { api } = useContext(ThemeContext);
   const tc = themeConfigOf(api);
   const avatar = page.data.avatar ?? tc.avatar;
-  const menuLink = tc.menu?.about?.link ?? "/about";
+  const avatarSize = page.data.avatar_size ?? "small";
+  const avatarClass = `about-avatar avatar-${avatarSize}`;
+  const avatarImgAlt = page.data.avatar_alt as string ?? "avatar";
   return (
     <div class="page-about">
       {avatar ? (
         <div class="about-card">
           <img
-            class="about-avatar"
-            alt="avatar"
-            src={menuLink + String(avatar)}
+            class={avatarClass}
+            alt={avatarImgAlt}
+            // FIXME: 解析方式不对需要修改，在 helper 中创建类似 getAssetsUrl 的方式获取
+            src={String(avatar)}
           />
           {page.excerpt ? (
             <div
