@@ -163,6 +163,8 @@ window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", Th
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <title>{titleTag(page, config)}</title>
 
+          {katexCss ? <link rel="stylesheet" href={tc.katex!.css} /> : null}
+
           {tc.style?.light ? (
             <link rel="stylesheet" href={themeAsset(tc.style.light)} />
           ) : null}
@@ -171,7 +173,6 @@ window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", Th
           ) : null}
           <link rel="stylesheet" href={themeAsset("css/main.css")} />
 
-          {katexCss ? <link rel="stylesheet" href={tc.katex!.css} /> : null}
           {config.markdown?.katex === false && tc.katex?.enable ? (
             <>
               {tc.katex.js?.map((js) => (
