@@ -19,6 +19,8 @@ export const languages: Record<string, Record<string, string>> = {
     pin: "置顶",
     draft: "草稿",
     view_more: "阅读全文",
+    outdated: "已过时",
+    outdated_msg: "本文章部分内容可能已过时",
   },
   "en-US": {
     goto_top: "Go to top",
@@ -39,6 +41,8 @@ export const languages: Record<string, Record<string, string>> = {
     pin: "Pinned",
     draft: "Draft",
     view_more: "Read more",
+    outdated: "Outdated",
+    outdated_msg: "This article may be outdated",
   },
 };
 

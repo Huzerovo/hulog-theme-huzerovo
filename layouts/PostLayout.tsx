@@ -100,6 +100,7 @@ export default function PostLayout(props: LayoutProps) {
                 {page.title && page.title !== "" ? page.title : t("untitled")}
               </h1>
               <div class="article-head-meta">
+              <div class="meta-date">
                 <span>
                   {t("publish_date")}: {formatDate(page.date)}
                 </span>
@@ -109,16 +110,22 @@ export default function PostLayout(props: LayoutProps) {
                   </span>
                 ) : null}
               </div>
+                {page.data.outdated ? (
+                  <span class="meta-outdated">
+                    {t(page.data.outdated_msg ? page.data.outdated_msg as string : "outdated_msg")}
+                  </span>
+                ) : null}
+              </div>
             </header>
 
             <div dangerouslySetInnerHTML={{ __html: wrapImages(page.content) }} />
 
             <footer class="article-foot">
               <div class="article-taxonomies">
-                {page.categories.length > 0 ? (
+                {page.categories!.length > 0 ? (
                   <p class="article-cats">
                     {t("categories")}:{" "}
-                    {page.categories.map((path, i) => (
+                    {page.categories!.map((path, i) => (
                       <a
                         key={path.join("/")}
                         class="article-category"

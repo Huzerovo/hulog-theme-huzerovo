@@ -59,6 +59,9 @@ export default function PostCard({ post }: { post: Page; }) {
             {post.data.todo ? (
               <span class="badge badge-todo">{t(todoMsg)}</span>
             ) : null}
+            {post.data.outdated ? (
+              <span class="badge badge-outdated">{t("outdated")}</span>
+            ) : null}
             {post.data.pin ? (
               <span class="badge badge-pin">{t("pin")}</span>
             ) : null}

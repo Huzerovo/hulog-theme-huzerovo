@@ -99,12 +99,24 @@
     }
 
     .article-head-meta {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      color: var(--hulog-text-faint);
-      font-size: 13px;
-      flex-wrap: wrap;
+      text-align: center;
+
+      .meta-date {
+        display: flex;
+        justify-content: center;
+        gap: 0px 20px;
+        color: var(--hulog-text-faint);
+        font-size: 13px;
+        flex-wrap: wrap;
+      }
+      
+      .meta-outdated {
+        padding: 3px 8px;
+        background: color-mix(in srgb, var(--hulog-error) 15%, transparent);
+        color: var(--hulog-error);
+        border-radius: 15px;
+        line-height: 2;
+      }
     }
   }
 
