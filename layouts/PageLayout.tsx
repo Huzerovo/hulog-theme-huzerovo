@@ -1,4 +1,4 @@
-import { useContext, useState } from "preact/hooks";
+import { useContext } from "preact/hooks";
 import type { CategoryNode, CategoryPath, HelperRegistry, LayoutProps, Page, Site } from "@hulog/core";
 import Layout from "../components/Layout";
 import Pager from "../components/Pager";
@@ -63,7 +63,6 @@ function PageBody({ page, site }: { page: Page; site: Site; }) {
 
 /** 通用文章列表页面 */
 function CollectionLayout({ page, site }: { page: Page, site: Site; }) {
-
   const posts = (site.collections.get(page.id)?.getPages() ?? []) as typeof page[];
   const pagination = page.data.pagination as any;
 

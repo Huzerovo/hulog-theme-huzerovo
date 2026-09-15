@@ -166,7 +166,6 @@
     overflow: scroll;
     margin: 18px 0;
     width: 100%;
-    max-height: 50vh;
     border: 1px solid var(--hulog-line-strong);
     border-radius: 8px;
 
@@ -221,7 +220,7 @@
         position: sticky;
         left: 0px;
         min-width: 60px;
-        max-width: 120px;
+        max-width: min(50vw, 240px);
       }
 
       th:first-child {
@@ -419,6 +418,21 @@
   text-align: center;
   color: var(--hulog-text-faint);
   font-size: 14px;
+}
+
+@media (max-width: 1200px) {
+  .article-container {
+    .table-wrapper {
+      max-height: max(50vh, 50vw);
+
+      table {
+        th:first-child,
+        td:first-child {
+          max-width: min(30vw, 120px);
+        }
+      }
+    }
+  }
 }
 
 @media (max-width: 960px) {

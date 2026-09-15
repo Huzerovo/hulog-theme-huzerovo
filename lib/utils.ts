@@ -65,6 +65,7 @@ export function getPostCovers(
 }
 
 /** 封面确定性选择（构建时稳定）：基于 slug 哈希取模 */
+// FIXME: 更改为 cover 选择。
 export function pickCoverUrl(covers: string[], slug: string): string {
   if (covers.length === 0) return "";
   if (covers.length === 1) return covers[0]!;
@@ -84,7 +85,7 @@ export function getPostsSortWithPin(posts: Page[]): Page[] {
 
 /** 未分类文章 */
 export function getUncategorizedPosts(posts: Page[]): Page[] {
-  return posts.filter((p) => p.categories.length === 0);
+  return posts.filter((p) => p.categories?.length === 0);
 }
 
 /** 由文章列表构建分类树（含祖先节点与计数） */
@@ -93,7 +94,7 @@ export function getCategoryTree(
   helper: HelperRegistry,
 ): CategoryNode[] {
   const paths: CategoryPath[] = [];
-  for (const p of posts) paths.push(...p.categories);
+  for (const p of posts) paths.push(...p.categories!);
   return helper.get("buildCategoryTree")!(paths) as CategoryNode[];
 }
 
@@ -130,7 +131,7 @@ export function categoryBreadcrumb(
 }
 
 /** 页面是否存在（menu 高亮判断） */
-export function hasPage(site: { pages: Page[] }, title: string): boolean {
+export function hasPage(site: { pages: Page[]; }, title: string): boolean {
   return site.pages.some((p) => p.title === title);
 }
 
@@ -153,7 +154,7 @@ export function getPageTitle(
 /** <title> 内容 */
 export function titleTag(
   page: Page,
-  config: { siteTitle: string; subtitle?: string; description?: string },
+  config: { siteTitle: string; subtitle?: string; description?: string; },
 ): string {
   let tail = "";
   if (config.subtitle) tail += " - " + config.subtitle;
@@ -173,7 +174,7 @@ export function getCC(tc: DefaultThemeConfig): string {
 /** 标签云：统计标签数量，字体大小映射（min 14 - max 30） */
 export function tagcloud(
   tags: Map<string, number>,
-): { tag: string; count: number; size: number }[] {
+): { tag: string; count: number; size: number; }[] {
   const counts = [...tags.entries()];
   if (counts.length === 0) return [];
   const max = Math.max(...counts.map(([, c]) => c));
