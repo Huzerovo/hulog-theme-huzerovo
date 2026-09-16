@@ -79,12 +79,11 @@ function CollectionLayout({ page, site }: { page: Page, site: Site; }) {
 
 /** 关于页 */
 function AboutPage({ page }: { page: Page; }) {
-  const { api } = useContext(ThemeContext);
-  const tc = themeConfigOf(api);
-  const avatar = page.data.avatar ?? tc.avatar;
+  const avatar = page.data.avatar as string | undefined;
   const avatarSize = page.data.avatar_size ?? "small";
   const avatarClass = `about-avatar avatar-${avatarSize}`;
   const avatarImgAlt = page.data.avatar_alt as string ?? "avatar";
+  const excerpt = page.data.excerpt as string | undefined;
   return (
     <div class="page-about">
       {avatar ? (
@@ -92,13 +91,12 @@ function AboutPage({ page }: { page: Page; }) {
           <img
             class={avatarClass}
             alt={avatarImgAlt}
-            // FIXME: 解析方式不对需要修改，在 helper 中创建类似 getAssetsUrl 的方式获取
             src={String(avatar)}
           />
-          {page.excerpt ? (
+          {excerpt ? (
             <div
               class="about-description"
-              dangerouslySetInnerHTML={{ __html: page.excerpt }}
+              dangerouslySetInnerHTML={{ __html: excerpt }}
             />
           ) : null}
         </div>

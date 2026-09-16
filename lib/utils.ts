@@ -36,44 +36,13 @@ export function formatDate(
 }
 
 /**
- * 文章封面列表：
- * - front-matter photos：http(s) 原样；/ 开头绝对路径原样；相对路径 → 文章 URL + 相对名
- * - front-matter cover 为真时追加主题默认 covers
+ * 解析引用为可展示 URL（相对/绝对/外链）：
+ * - http(s)://、// 或 / 开头 → 原样
+ * - 相对路径 → 文章 URL + 相对名（文章专属目录，与页面同目录输出）
  */
-export function getPostCovers(
-  post: Page,
-  tc: DefaultThemeConfig,
-): string[] {
-  const covers: string[] = [];
-  const photos = post.data.photos;
-  if (Array.isArray(photos)) {
-    for (const photo of photos) {
-      const s = String(photo);
-      if (/^(http|https):\/\//.test(s)) {
-        covers.push(s);
-      } else if (s.startsWith("/")) {
-        covers.push(s);
-      } else {
-        covers.push(post.url + s);
-      }
-    }
-  }
-  if (post.cover && Array.isArray(tc.covers)) {
-    for (const c of tc.covers) covers.push(c);
-  }
-  return covers;
-}
-
-/** 封面确定性选择（构建时稳定）：基于 slug 哈希取模 */
-// FIXME: 更改为 cover 选择。
-export function pickCoverUrl(covers: string[], slug: string): string {
-  if (covers.length === 0) return "";
-  if (covers.length === 1) return covers[0]!;
-  let hash = 0;
-  for (let i = 0; i < slug.length; i++) {
-    hash = (hash * 31 + slug.charCodeAt(i)) >>> 0;
-  }
-  return covers[hash % covers.length]!;
+export function getURL(ref: string, page: Page): string {
+  if (/^(https?:)?\/\//.test(ref) || ref.startsWith("/")) return ref;
+  return page.url + ref;
 }
 
 /** 置顶排序：front-matter pin 优先 */

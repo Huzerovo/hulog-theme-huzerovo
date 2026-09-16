@@ -1,11 +1,9 @@
 import { useContext } from "preact/hooks";
 import type { Page } from "@hulog/core";
 import { ThemeContext } from "../lib/context";
-import { themeConfigOf } from "../lib/types";
 import {
   formatDate,
-  getPostCovers,
-  pickCoverUrl,
+  getURL,
   stripHtml,
   truncate,
 } from "../lib/utils";
@@ -15,14 +13,12 @@ import {
  * 封面（可选）+ 标题 + 摘要 + 底部信息（日期 / 置顶 / 待办徽标）。
  */
 export default function PostCard({ post }: { post: Page; }) {
-  const { config, t, api } = useContext(ThemeContext);
-  const tc = themeConfigOf(api);
-  const covers = getPostCovers(post, tc);
-  const postLink = post.link && post.link !== "" ? post.link : post.url;
-  const cover =
-    covers.length > 0 ? pickCoverUrl(covers, post.slug) : "";
+  const { t } = useContext(ThemeContext);
+  const link = post.data.link as string | undefined;
+  const postLink = link && link !== "" ? link : post.url;
+  const cover = post.data.cover ? getURL(post.data.cover as string, post) : "";
 
-  const excerpt = stripHtml(post.excerpt ?? "");
+  const excerpt = stripHtml((post.data.excerpt as string) ?? "");
   const todoMsg = post.data.todo_msg as string ?? "todo_msg";
   const content =
     excerpt === ""

@@ -55,8 +55,8 @@ export default function ArchiveLayout(props: LayoutProps) {
                     year ? p.date!.getFullYear() === year : true,
                   )
                   .map((p) => {
-                    const postLink =
-                      p.link && p.link !== "" ? p.link : p.url;
+                    const link = p.data.link as string | undefined;
+                    const postLink = link && link !== "" ? link : p.url;
                     return (
                       <li class="archive-item" key={p.id}>
                         <time class="archive-item-date">

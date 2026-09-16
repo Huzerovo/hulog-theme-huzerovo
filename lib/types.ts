@@ -20,8 +20,6 @@ export interface DefaultThemeConfig {
   brand?: string;
   /** 菜单：key → 标题与链接（key 与页面 title 对应可高亮） */
   menu?: Record<string, { title: string; link: string; }>;
-  /** 默认封面列表（文章 front-matter cover: true 时追加） */
-  covers?: string[];
   /** 邮箱（页脚） */
   email?: string;
   /** 搜索配置 */
@@ -54,10 +52,6 @@ export interface DefaultThemeConfig {
   links?: Record<string, { title?: string; url?: string; }>;
   /** 知识共享协议（页脚） */
   creativecommons?: { license?: string; link?: string; description?: string; };
-  /** 归档配置 */
-  archives_page?: { enabled?: boolean; year_per_page?: number; };
-  /** 头像（关于页） */
-  avatar?: string;
 }
 
 export function themeConfigOf(api: CoreAPI): DefaultThemeConfig {

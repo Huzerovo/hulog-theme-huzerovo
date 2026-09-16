@@ -26,7 +26,6 @@ export default {
       tagcloud: { title: "标签云", link: "/tagcloud" },
       about: { title: "关于", link: "/about" },
     },
-    covers: [],
     email: "",
     search: { enable: true, link: "/search" },
     toc: true,
@@ -45,7 +44,6 @@ export default {
       link: "https://creativecommons.org/licenses/by-nc-nd/4.0/",
       description: "如无特殊说明，网站内容采用#授权",
     },
-    archives_page: { enabled: true, year_per_page: 5 },
   },
   layouts: {
     post: PostLayout,
