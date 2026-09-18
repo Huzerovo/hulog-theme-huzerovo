@@ -4,6 +4,8 @@ import HomeLayout from "./layouts/HomeLayout";
 import ArchiveLayout from "./layouts/ArchiveLayout";
 import CategoryLayout from "./layouts/CategoryLayout";
 import TagLayout from "./layouts/TagLayout";
+import GalleryLayout from "./layouts/GalleryLayout";
+import GalleryIndexLayout from "./layouts/GalleryIndexLayout";
 
 /**
  * default 主题 —— 站点默认主题
@@ -44,6 +46,7 @@ export default {
       link: "https://creativecommons.org/licenses/by-nc-nd/4.0/",
       description: "如无特殊说明，网站内容采用#授权",
     },
+    gallery: { columns: 3, lightbox: true },
   },
   layouts: {
     post: PostLayout,
@@ -52,6 +55,8 @@ export default {
     archives: ArchiveLayout,
     category: CategoryLayout,
     tag: TagLayout,
+    gallery: GalleryLayout,
+    "gallery-index": GalleryIndexLayout,
     default: PageLayout,
   },
 };

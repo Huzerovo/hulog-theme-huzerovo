@@ -121,8 +121,9 @@ window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", Th
   if (lightbox) {
     // 构建时已把正文图片包为 .img-link（无 JS 时点击新标签打开原图）
     // 首页卡片封面 .post-card-cover 同样：href 指向图片，JS 拦截后走灯箱
+    // 图册页 .gallery-item 同样（gallery.lightbox 关闭时不加该类）
     document
-      .querySelectorAll("a.img-link, .post-card-cover")
+      .querySelectorAll("a.img-link, .post-card-cover${tc.gallery?.lightbox !== false ? ", .gallery-item" : ""}")
       .forEach(function (link) {
         link.addEventListener("click", function (e) {
           e.preventDefault();

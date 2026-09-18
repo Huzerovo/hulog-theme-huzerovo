@@ -52,6 +52,13 @@ export interface DefaultThemeConfig {
   links?: Record<string, { title?: string; url?: string; }>;
   /** 知识共享协议（页脚） */
   creativecommons?: { license?: string; link?: string; description?: string; };
+  /** 图册页（layout: gallery）配置 */
+  gallery?: {
+    /** 栅格列数（桌面端），默认 3；移动端（≤760px）自动降为 2 */
+    columns?: number;
+    /** 点击图片是否启用灯箱放大，默认 true */
+    lightbox?: boolean;
+  };
 }
 
 export function themeConfigOf(api: CoreAPI): DefaultThemeConfig {
