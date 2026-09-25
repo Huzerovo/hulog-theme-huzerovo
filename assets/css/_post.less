@@ -168,10 +168,15 @@
     width: 100%;
     border: 1px solid var(--hulog-line-strong);
     border-radius: 8px;
+    /* 圆角内侧底色：避免角落露出页面背景/滚动的文字 */
+    background: var(--hulog-bg-elevated);
 
     table {
       width: 100%;
-      border-collapse: collapse;
+      /* separate：塌陷模式下 sticky 首列的右边界线会随内容滚走（缝隙漏文字），
+         改为每个格子自持边框，sticky 列的边框才能固定随列显示 */
+      border-collapse: separate;
+      border-spacing: 0;
       font-size: 15px;
       table-layout: auto;
       min-width: max-content;
@@ -190,13 +195,19 @@
 
       th,
       td {
-        border: 1px solid var(--hulog-line);
+        border: none;
+        border-right: 1px solid var(--hulog-line);
+        border-bottom: 1px solid var(--hulog-line);
         padding: 8px 12px;
         min-width: 120px;
         max-width: 480px;
         box-sizing: border-box;
         overflow-wrap: anywhere;
         word-break: break-word;
+      }
+
+      thead th {
+        border-top: 1px solid var(--hulog-line);
       }
 
       tbody tr:nth-child(even) {
@@ -221,6 +232,7 @@
         left: 0px;
         min-width: 60px;
         max-width: min(50vw, 240px);
+        border-left: 1px solid var(--hulog-line);
       }
 
       th:first-child {

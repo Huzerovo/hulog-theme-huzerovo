@@ -58,6 +58,7 @@ hr {
 
 mark {
   background-color: var(--hulog-mark);
+  color: var(--hulog-text-strong);
   padding: 0 3px;
   border-radius: 3px;
 }
@@ -81,7 +82,7 @@ pre {
 
 /* shiki 代码块 */
 pre.shiki {
-  background-color: var(--hulog-code-bg) !important;
+  background-color: var(--hulog-code-block-bg, var(--hulog-code-bg)) !important;
   border: 1px solid var(--hulog-line);
   border-radius: 10px;
   padding: 14px 18px;

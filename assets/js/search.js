@@ -1,5 +1,6 @@
 /* default 主题 · 原生搜索（无依赖）：
  * 拉取 /search.json，按空格分词过滤标题/正文/标签/分类，/regex/ 支持正则。
+ * 摘要以最早命中的关键词为中心截取（关键词靠后也能在预览中高亮）。
  * 由 Layout 底部脚本在 #search-input 上绑定 input 事件调用 window.searchArticles。
  */
 (function () {
@@ -75,6 +76,39 @@
     return true;
   }
 
+  /**
+   * 摘要：以最早命中的关键词为中心截取 ~maxLen 窗口，并保证完整包含关键词
+   * （避免截断破坏高亮）。前后截断处用 … 标注；未命中（理论上不会发生）回退为从头截断。
+   */
+  function excerptAround(content, comps, maxLen) {
+    var pos = -1;
+    var kwLen = 1;
+    for (var i = 0; i < comps.length; i++) {
+      var c = comps[i];
+      var m = c.re
+        ? c.re.exec(content)
+        : c.plain
+          ? new RegExp(escapeRegExp(c.plain), "i").exec(content)
+          : null;
+      if (m && (pos === -1 || m.index < pos)) {
+        pos = m.index;
+        kwLen = m[0].length || 1;
+      }
+    }
+    if (pos === -1) {
+      if (content.length <= maxLen) return content;
+      return content.slice(0, maxLen) + "…";
+    }
+    var lead = Math.floor(maxLen * 0.35);
+    var start = Math.max(0, pos - lead);
+    var end = Math.min(content.length, start + maxLen);
+    if (end < pos + kwLen) end = Math.min(content.length, pos + kwLen);
+    var out = content.slice(start, end);
+    if (start > 0) out = "…" + out;
+    if (end < content.length) out += "…";
+    return out;
+  }
+
   function render(items, container, comps) {
     if (items.length === 0) {
       container.innerHTML = '<p class="search-empty">无结果</p>';
@@ -83,8 +117,7 @@
     var html = "";
     for (var i = 0; i < items.length; i++) {
       var it = items[i];
-      var excerpt = it.content;
-      if (excerpt.length > 160) excerpt = excerpt.slice(0, 160) + "…";
+      var excerpt = excerptAround(it.content, comps, 160);
       html +=
         '<a class="search-item" href="' +
         it.url +
