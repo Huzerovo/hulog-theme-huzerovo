@@ -1,5 +1,6 @@
 import type { LayoutProps } from "@hulog/core";
 import Layout from "../components/Layout";
+import { makeT } from "../lib/i18n";
 import { themeConfigOf } from "../lib/types";
 import { getURL } from "../lib/utils";
 
@@ -14,6 +15,7 @@ import { getURL } from "../lib/utils";
 export default function GalleryLayout(props: LayoutProps) {
   const { page, api } = props;
   const tc = themeConfigOf(api);
+  const t = makeT(api.site!.config.language);
   const photos = (page.data.photos as string[] | undefined) ?? [];
   const columns = tc.gallery?.columns ?? 3;
   const useLightbox = tc.gallery?.lightbox !== false;
@@ -53,9 +55,7 @@ export default function GalleryLayout(props: LayoutProps) {
             })}
           </div>
         ) : (
-          <p class="gallery-empty">
-            暂无图片（在 front-matter 中通过 photos 字段提供）
-          </p>
+          <p class="gallery-empty">{t("gallery_empty")}</p>
         )}
       </main>
     </Layout>

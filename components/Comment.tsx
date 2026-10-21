@@ -19,7 +19,8 @@ export default function Comment({ page }: { page: Page; }) {
     );
   }
 
-  const conf: GitalkConfig = tc.gitalk.config!;
+  // 复制配置再改（避免修改主题共享的配置对象）
+  const conf: GitalkConfig = { ...tc.gitalk.config! };
   conf.number = -1;
   conf.title = page.title;
   conf.id = page.title;

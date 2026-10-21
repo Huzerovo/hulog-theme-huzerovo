@@ -46,9 +46,9 @@ function PageBody({ page, site }: { page: Page; site: Site; }) {
     case "search":
       return <SearchPage />;
     case "tagcloud":
-      return <TagCloudPage site={site} />;
+      return <TagCloudPage />;
     case "uncategorized":
-      return <UncategorizedPage site={site} />;
+      return <UncategorizedPage />;
     case "collection":
       return <CollectionLayout page={page} site={site} />;
     case "single":
@@ -109,13 +109,14 @@ function AboutPage({ page }: { page: Page; }) {
   );
 }
 
-/** 分类页：未分类入口 + 分类树（huzerovo 风格嵌套列表，父分类下显示子分类） */
+/** 分类页：未分类入口 + 分类树（数据源为全部非虚拟集合的文章） */
 function CategoriesPage({ site }: { site: Site; }) {
   const { config, t, api } = useContext(ThemeContext);
   const helper = api.helper;
-  const posts = site.collections.get("posts")?.getPages(true) ?? [];
-  const tree = getCategoryTree(posts, helper);
-  const uncategorized = getUncategorizedPosts(posts);
+  const taxonomyPages = helper.get("taxonomyPages") as () => Page[];
+  const pages = taxonomyPages();
+  const tree = getCategoryTree(pages, helper);
+  const uncategorized = getUncategorizedPosts(pages);
 
   return (
     <div class="page-categories">
@@ -183,10 +184,11 @@ function SearchPage() {
 }
 
 /** 标签云页 */
-function TagCloudPage({ site }: { site: Site; }) {
-  const posts = site.collections.get("posts")?.getPages(true) ?? [];
+function TagCloudPage() {
+  const { api } = useContext(ThemeContext);
+  const taxonomyPages = api.helper.get("taxonomyPages") as () => Page[];
   const counts = new Map<string, number>();
-  for (const p of posts) {
+  for (const p of taxonomyPages()) {
     for (const tag of p.tags ?? []) counts.set(tag, (counts.get(tag) ?? 0) + 1);
   }
   const cloud = tagcloud(counts);
@@ -207,10 +209,10 @@ function TagCloudPage({ site }: { site: Site; }) {
 }
 
 /** 未分类页 */
-function UncategorizedPage({ site }: { site: Site; }) {
-  const posts = getUncategorizedPosts(
-    site.collections.get("posts")?.getPages(true) ?? [],
-  );
+function UncategorizedPage() {
+  const { api } = useContext(ThemeContext);
+  const taxonomyPages = api.helper.get("taxonomyPages") as () => Page[];
+  const posts = getUncategorizedPosts(taxonomyPages());
   return (
     <>
       <Pager pagination={undefined} />

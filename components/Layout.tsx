@@ -8,9 +8,13 @@ import Topbar from "./Topbar";
 import GotoTop from "./GotoTop";
 import SiteFooter from "./SiteFooter";
 
+/** 首屏前应用明暗主题（避免闪烁）：dark | light | auto（跟随系统） */
+const THEME_INIT_SCRIPT = `(function(){try{var k=localStorage.getItem("df-theme-prefer");var d=k==="dark"||(k!=="light"&&window.matchMedia("(prefers-color-scheme: dark)").matches);var r=document.documentElement;if(d)r.classList.add("dark");r.dataset.theme=d?"dark":"light";r.style.colorScheme=d?"dark":"light";}catch(e){}})();`;
+
 /**
- * 基础布局：HTML 骨架 + 主题资源/第三方库注入 + 原生 JS（主题切换等）。
- * 不依赖 jQuery / Bootstrap Icons：图标为内联 SVG，交互为原生脚本。
+ * 基础布局：HTML 骨架 + 主题资源/第三方库注入 + 首屏主题脚本。
+ * 交互逻辑（主题切换/搜索/目录折叠/回到顶部/灯箱）见 assets/js/theme.js。
+ * 不依赖 jQuery / Bootstrap Icons：图标为内联 SVG。
  */
 export default function Layout({
   page,
@@ -22,7 +26,6 @@ export default function Layout({
   const tc = themeConfigOf(api);
   const t = makeT(config.language);
   const themeAsset = api.helper.get("themeAsset") as (p: string) => string;
-  const useCoreHighlight = config.markdown?.highlight !== false;
   const katexCss = config.markdown?.katex !== false && tc.katex?.enable;
   // Mermaid：仅当本页含 .mermaid 容器时按需加载客户端渲染脚本
   const mermaidEnabled =
@@ -32,117 +35,6 @@ export default function Layout({
     "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
   const mermaidTheme = tc.mermaid?.theme ?? "default";
   const hasMermaid = mermaidEnabled && page.content.includes('class="mermaid"');
-
-  const themeScript = `
-const ThemeSwitcher = (() => {
-  const KEY = "df-theme-prefer";
-  const root = () => document.documentElement;
-  const isDark = () => root().classList.contains("dark");
-  const apply = (mode) => {
-    if (mode === "dark") root().classList.add("dark");
-    else if (mode === "light") root().classList.remove("dark");
-    else if (window.matchMedia("(prefers-color-scheme: dark)").matches) root().classList.add("dark");
-    else root().classList.remove("dark");
-    localStorage.setItem(KEY, mode);
-  };
-  const current = () => localStorage.getItem(KEY) || "auto";
-  const toggle = () => {
-    const dark = isDark();
-    const devDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    if ((!dark && devDark) || (dark && !devDark)) apply("auto");
-    else if (dark) apply("light");
-    else apply("dark");
-  };
-  return { init: () => apply(current()), toggle, follow: () => apply(current()) };
-})();
-(function () {
-  try {
-    let root = ThemeSwitcher.root();
-    let current = ThemeSwitcher.current();
-    let dark = current ? current === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
-    root.dataset.theme = dark ? 'dark' : 'light';
-    root.style.colorScheme = dark ? 'dark' : 'light';
-  } catch (e) {};
-})();
-window.load = ThemeSwitcher.init();
-window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", ThemeSwitcher.follow);
-`;
-
-  const bottomScript = `
-(function () {
-  var btn = document.getElementById("btn-switch-theme");
-  if (btn) btn.addEventListener("click", ThemeSwitcher.toggle);
-
-  var searchInput = document.getElementById("search-input");
-  if (searchInput && window.searchArticles) {
-    searchInput.addEventListener("input", function () {
-      window.searchArticles(this.value, "/search.json");
-    });
-  }
-
-  var menu = document.querySelector(".topbar-menu ul");
-  if (menu) {
-    var updateMenuFade = function () {
-      menu.classList.toggle("scrollable", menu.scrollWidth > menu.clientWidth + 1);
-    };
-    updateMenuFade();
-    window.addEventListener("resize", updateMenuFade);
-  }
-
-  var toc = document.getElementById("article-toc");
-  var tocBtn = document.querySelector(".toc-toggle");
-  if (toc && tocBtn) {
-    var applyToc = function (collapsed) {
-      toc.classList.toggle("collapsed", collapsed);
-      tocBtn.setAttribute("aria-expanded", String(!collapsed));
-    };
-    // 恢复上次折叠状态（localStorage）
-    applyToc(localStorage.getItem("df-toc-collapsed") === "1");
-    tocBtn.addEventListener("click", function () {
-      var next = !toc.classList.contains("collapsed");
-      applyToc(next);
-      localStorage.setItem("df-toc-collapsed", next ? "1" : "0");
-    });
-  }
-
-  var topBtn = document.getElementById("goto-top");
-  if (topBtn) {
-    window.addEventListener("scroll", function () {
-      if (window.scrollY > 300) topBtn.classList.add("show");
-      else topBtn.classList.remove("show");
-    });
-    topBtn.addEventListener("click", function () {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  }
-
-  ${tc.lightbox?.enable !== false ? `
-  var lightbox = document.getElementById("lightbox");
-  if (lightbox) {
-    // 构建时已把正文图片包为 .img-link（无 JS 时点击新标签打开原图）
-    // 首页卡片封面 .post-card-cover 同样：href 指向图片，JS 拦截后走灯箱
-    // 图册页 .gallery-item 同样（gallery.lightbox 关闭时不加该类）
-    document
-      .querySelectorAll("a.img-link, .post-card-cover${tc.gallery?.lightbox !== false ? ", .gallery-item" : ""}")
-      .forEach(function (link) {
-        link.addEventListener("click", function (e) {
-          e.preventDefault();
-          var inner = link.querySelector("img");
-          var src = inner ? inner.src : link.href;
-          lightbox.querySelector("img").src = src;
-          lightbox.classList.add("open");
-        });
-      });
-    // 仅点击遮罩背景关闭（点图片本身不关，避免冒泡闪关）
-    lightbox.addEventListener("click", function (e) {
-      if (e.target === lightbox) lightbox.classList.remove("open");
-    });
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") lightbox.classList.remove("open");
-    });
-  }` : ""}
-})();
-`;
 
   return (
     <ThemeContext.Provider value={{ config, t, api }}>
@@ -162,6 +54,10 @@ window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", Th
             content="#141416"
           />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
+          {tc.favicon ? <link rel="icon" href={tc.favicon} /> : null}
+          {tc.appleTouchIcon ? (
+            <link rel="apple-touch-icon" href={tc.appleTouchIcon} />
+          ) : null}
           <title>{titleTag(page, config)}</title>
 
           {katexCss ? <link rel="stylesheet" href={tc.katex!.css} /> : null}
@@ -197,7 +93,7 @@ window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", Th
             </>
           ) : null}
 
-          <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+          <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         </head>
         <body>
           <Topbar active={active} />
@@ -219,7 +115,7 @@ window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", Th
               data-theme={mermaidTheme}
             />
           ) : null}
-          <script dangerouslySetInnerHTML={{ __html: bottomScript }} />
+          <script src={themeAsset("js/theme.js")}></script>
         </body>
       </html>
     </ThemeContext.Provider>

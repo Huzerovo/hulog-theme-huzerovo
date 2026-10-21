@@ -1,15 +1,20 @@
 import type { LayoutProps } from "@hulog/core";
 import Layout from "../components/Layout";
+import { makeT } from "../lib/i18n";
+import { themeConfigOf } from "../lib/types";
 import { getURL } from "../lib/utils";
 
 /**
  * 图册索引布局（layout: gallery-index，虚拟页 /gallery/）：
- * 列出 gallery 集合的全部图册卡片——封面 = 每册首图（photos[0]）、标题、图片数量。
- * 点击卡片进入对应图册页（/gallery/:slug/）。
+ * 列出图册集合的全部图册卡片——封面 = 每册首图（photos[0]）、标题、图片数量。
+ * 集合名可用主题配置 gallery.collection 覆盖（默认 "gallery"）。
  */
 export default function GalleryIndexLayout(props: LayoutProps) {
   const { page, api } = props;
-  const galleries = api.site.collections.get("gallery")?.getPages() ?? [];
+  const tc = themeConfigOf(api);
+  const t = makeT(api.site!.config.language);
+  const collection = tc.gallery?.collection ?? "gallery";
+  const galleries = api.site.collections.get(collection)?.getPages() ?? [];
 
   return (
     <Layout {...props} active="gallery">
@@ -31,15 +36,15 @@ export default function GalleryIndexLayout(props: LayoutProps) {
                     <span class="gallery-album-no-cover" />
                   )}
                   <span class="gallery-album-title">{g.title}</span>
-                  <span class="gallery-album-meta">{photos.length} 张</span>
+                  <span class="gallery-album-meta">
+                    {t("photo_count").replace("{n}", String(photos.length))}
+                  </span>
                 </a>
               );
             })}
           </div>
         ) : (
-          <p class="gallery-empty">
-            暂无图册（在 content/gallery/ 下添加 Markdown 文件）
-          </p>
+          <p class="gallery-empty">{t("gallery_index_empty")}</p>
         )}
       </main>
     </Layout>

@@ -71,7 +71,7 @@ export default function ArchiveLayout(props: LayoutProps) {
               </ul>
             </section>
           ))}
-          {yearList.length === 0 ? <p class="archive-empty">暂无文章</p> : null}
+          {yearList.length === 0 ? <p class="archive-empty">{t("no_articles")}</p> : null}
         </div>
         <Pager pagination={pagination} />
       </main>

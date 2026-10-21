@@ -47,6 +47,8 @@ export default {
       description: "如无特殊说明，网站内容采用#授权",
     },
     gallery: { columns: 3, lightbox: true },
+    favicon: "/favicon.svg",
+    appleTouchIcon: "/apple-touch-icon.png",
   },
   layouts: {
     post: PostLayout,

@@ -1,4 +1,4 @@
-import type { CategoryPath, HelperRegistry, LayoutProps, Site } from "@hulog/core";
+import type { CategoryPath, HelperRegistry, LayoutProps, Page } from "@hulog/core";
 import Layout from "../components/Layout";
 import Pager from "../components/Pager";
 import PostList from "../components/PostList";
@@ -24,7 +24,7 @@ export default function CategoryLayout(props: LayoutProps) {
     path: CategoryPath,
   ) => string;
   const crumbs = categoryBreadcrumb(path, helper);
-  const children = getChildCategories(api.site!, path, helper);
+  const children = getChildCategories(path, helper);
 
   return (
     <Layout {...props } active="categories">
@@ -68,14 +68,13 @@ export default function CategoryLayout(props: LayoutProps) {
   );
 }
 
-/** 当前分类的直接子分类列表（来自站点文章分类树） */
+/** 当前分类的直接子分类列表（来自全部非虚拟集合文章的分类树） */
 function getChildCategories(
-  site: Site,
   path: CategoryPath,
   helper: HelperRegistry,
 ): { name: string; path: CategoryPath; count: number; }[] {
-  const posts = site.collections.get("posts")?.getPages(true) ?? [];
-  const tree = getCategoryTree(posts, helper);
+  const taxonomyPages = helper.get("taxonomyPages") as () => Page[];
+  const tree = getCategoryTree(taxonomyPages(), helper);
   const node = findCategoryNode(tree, path);
   if (!node) return [];
   return node.children.map((c) => ({

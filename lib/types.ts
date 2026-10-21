@@ -52,8 +52,14 @@ export interface DefaultThemeConfig {
   links?: Record<string, { title?: string; url?: string; }>;
   /** 知识共享协议（页脚） */
   creativecommons?: { license?: string; link?: string; description?: string; };
+  /** 站点图标（favicon）路径，如 "/favicon.svg"；留空则不输出 */
+  favicon?: string;
+  /** iOS 主屏图标（apple-touch-icon）路径，如 "/apple-touch-icon.png" */
+  appleTouchIcon?: string;
   /** 图册页（layout: gallery）配置 */
   gallery?: {
+    /** 图册集合名（gallery-index 索引页使用），默认 "gallery" */
+    collection?: string;
     /** 栅格列数（桌面端），默认 3；移动端（≤760px）自动降为 2 */
     columns?: number;
     /** 点击图片是否启用灯箱放大，默认 true */
