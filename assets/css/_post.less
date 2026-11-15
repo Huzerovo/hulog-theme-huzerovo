@@ -117,6 +117,36 @@
         border-radius: 15px;
         line-height: 2;
       }
+
+      .meta-ai {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 10px;
+        padding: 3px 10px;
+        border: 1px solid color-mix(in srgb, var(--hulog-accent) 24%, transparent);
+        border-radius: 999px;
+        background: linear-gradient(
+          120deg,
+          color-mix(in srgb, var(--hulog-accent) 10%, transparent),
+          color-mix(in srgb, var(--hulog-warm) 14%, transparent)
+        );
+        color: var(--hulog-accent);
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.5;
+        vertical-align: middle;
+        white-space: nowrap;
+
+        svg {
+          flex: none;
+          color: var(--hulog-warm);
+        }
+      }
+
+      .meta-ai + .meta-outdated {
+        margin-left: 8px;
+      }
     }
   }
 

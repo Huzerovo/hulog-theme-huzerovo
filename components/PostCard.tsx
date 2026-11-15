@@ -61,6 +61,11 @@ export default function PostCard({ post }: { post: Page; }) {
             {post.data.pin ? (
               <span class="badge badge-pin">{t("pin")}</span>
             ) : null}
+            {post.data.ai === true ? (
+              <span class="badge badge-ai" title={t("ai_generated_hint")}>
+                {t("ai_generated")}
+              </span>
+            ) : null}
             <a class="post-card-more" href={postLink}>
               {t("view_more")} →
             </a>

@@ -156,6 +156,17 @@ main.container {
   color: var(--hulog-text-muted);
 }
 
+/* AI 生成徽标：与文章页 .meta-ai 使用同一套渐变 */
+.badge-ai {
+  background: linear-gradient(
+    120deg,
+    color-mix(in srgb, var(--hulog-accent) 14%, transparent),
+    color-mix(in srgb, var(--hulog-warm) 16%, transparent)
+  );
+  color: var(--hulog-accent);
+  font-weight: 600;
+}
+
 @media (max-width: 640px) {
   .post-card {
     flex-direction: column;
