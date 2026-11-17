@@ -111,7 +111,7 @@ export default function PostLayout(props: LayoutProps) {
                 ) : null}
               </div>
                 {page.data.ai === true ? (
-                  <span class="meta-ai" title={t("ai_generated_hint")}>
+                  <span class="meta meta-ai" title={t("ai_generated_hint")}>
                     <svg
                       viewBox="0 0 24 24"
                       width="13"
@@ -125,7 +125,21 @@ export default function PostLayout(props: LayoutProps) {
                   </span>
                 ) : null}
                 {page.data.outdated ? (
-                  <span class="meta-outdated">
+                  <span class="meta meta-outdated">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="13"
+                      height="13"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M12 7v5l3 2" />
+                    </svg>
                     {t(page.data.outdated_msg ? page.data.outdated_msg as string : "outdated_msg")}
                   </span>
                 ) : null}

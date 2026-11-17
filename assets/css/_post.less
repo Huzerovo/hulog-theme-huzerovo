@@ -110,42 +110,51 @@
         flex-wrap: wrap;
       }
       
-      .meta-outdated {
-        padding: 3px 8px;
-        background: color-mix(in srgb, var(--hulog-error) 15%, transparent);
-        color: var(--hulog-error);
-        border-radius: 15px;
-        line-height: 2;
-      }
+      /* 文章页 meta 标签基础样式：新增标签只需设置 --meta-* 变量 */
+      .meta {
+        --meta-color: var(--hulog-text-muted);
+        --meta-bg: color-mix(in srgb, var(--meta-color) 12%, transparent);
+        --meta-border: color-mix(in srgb, var(--meta-color) 24%, transparent);
+        --meta-icon-color: currentColor;
 
-      .meta-ai {
         display: inline-flex;
         align-items: center;
         gap: 5px;
         margin-top: 10px;
         padding: 3px 10px;
-        border: 1px solid color-mix(in srgb, var(--hulog-accent) 24%, transparent);
+        border: 1px solid var(--meta-border);
         border-radius: 999px;
-        background: linear-gradient(
-          120deg,
-          color-mix(in srgb, var(--hulog-accent) 10%, transparent),
-          color-mix(in srgb, var(--hulog-warm) 14%, transparent)
-        );
-        color: var(--hulog-accent);
+        background: var(--meta-bg);
+        color: var(--meta-color);
         font-size: 12px;
         font-weight: 600;
         line-height: 1.5;
         vertical-align: middle;
         white-space: nowrap;
 
-        svg {
+        > svg {
           flex: none;
-          color: var(--hulog-warm);
+          color: var(--meta-icon-color);
         }
       }
 
-      .meta-ai + .meta-outdated {
+      .meta + .meta {
         margin-left: 8px;
+      }
+
+      .meta-ai {
+        --meta-color: var(--hulog-accent);
+        --meta-bg: linear-gradient(
+          120deg,
+          color-mix(in srgb, var(--hulog-accent) 10%, transparent),
+          color-mix(in srgb, var(--hulog-warm) 14%, transparent)
+        );
+        --meta-icon-color: var(--hulog-warm);
+      }
+
+      .meta-outdated {
+        --meta-color: var(--hulog-error);
+        --meta-bg: color-mix(in srgb, var(--hulog-error) 10%, transparent);
       }
     }
   }
