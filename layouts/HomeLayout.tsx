@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import Pager from "../components/Pager";
 import PostList from "../components/PostList";
 import { themeConfigOf } from "../lib/types";
+import { getPostsSortWithPin } from "../lib/utils";
 
 /**
  * 首页布局：page.data.posts（当前页文章）+ page.data.pagination
@@ -10,7 +11,7 @@ import { themeConfigOf } from "../lib/types";
 export default function HomeLayout(props: LayoutProps) {
   const { page, api } = props;
   const tc = themeConfigOf(api);
-  const posts = (page.data.posts ?? []) as typeof page[];
+  const posts = getPostsSortWithPin((page.data.posts ?? []) as typeof page[]);
   const pagination = page.data.pagination as any;
 
   return (
